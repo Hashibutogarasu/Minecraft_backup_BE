@@ -1,10 +1,8 @@
 import sys
 import os
-import time
 import glob
 import shutil
 import datetime
-import threading
 
 
 dt_now = datetime.datetime.now()
@@ -40,16 +38,6 @@ class mcfunction():
         
         return mcworldpath
 
-def progress(text):
-    i=0
-    print(text)
-    while True:
-        print(f"\rバックアップ中... [{i}%]",end="")
-        i=i+1
-        time.sleep(0.001)
-        if i == 101:
-            break
-    print(" 完了。")
 
 def main():
     mc = mcfunction
@@ -61,12 +49,10 @@ def main():
     files = os.listdir(worldpath)
     
     for worldfile in files:
-        try:
-            thread_1 = threading.Thread(target=progress(f"\r{worldpath+worldfile}"))
-            thread_1.start()
-            #print(f"\r{worldpath+worldfile}\nバックアップ中.... [0%]",end="")
+        try:        
+            print(f"\r{worldpath+worldfile}\nバックアップ中.... [0%]",end="")
             shutil.make_archive(f'{backuppath}/backup_{dt_now.strftime("%Y_%m_%d_%H_%M_%S")}', 'zip', root_dir=worldpath)
-            #print(f"\rバックアップ中... [100%]",end="")
+            print(f"\rバックアップ中... [100%]",end="")
             
         except Exception as e:
             print(f"エラーが発生しました。{worldpath+worldfile}は圧縮されません。\nエラー内容:{e}")
